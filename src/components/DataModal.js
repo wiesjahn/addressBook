@@ -39,6 +39,7 @@ function getModalStyle() {
 export default function DataModal(props) {
     const { action, handleClose } = props;
     let contact = props.contact;
+ 
     const [ firstName, setFirstName ] = React.useState(contact.firstName);
     const [ lastName, setLastName ] = React.useState(contact.lastName);
     const [ home, setHome ] = React.useState(contact.home);
@@ -80,8 +81,15 @@ export default function DataModal(props) {
     }
 
     async function newContact() { 
-        console.log(contact);
-        await API.graphql(graphqlOperation(createContact, { input: contact }));
+        const nonIdContact = {
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            home: contact.home ==="" ? null : contact.home,
+            mobile: contact.mobile ==="" ? null : contact.mobile,
+            work: contact.work ==="" ? null : contact.work,
+            type: contact.type 
+        }
+        await API.graphql(graphqlOperation(createContact, { input: nonIdContact }));
         handleClose();
     }
     

@@ -16,11 +16,6 @@ const initialState = {
 };
 
 //Subscribe to a New Contact being added
-const subscription = API.graphql(
-  graphqlOperation(subscriptions.onCreateContact)
-).subscribe({
-  next: (contactData) => initialState.contacts = contactData
-});
 
 
 // Action Types
@@ -47,8 +42,38 @@ const useStyles = makeStyles(theme => ({
         maxWidth: 1100
     }
   }));
+
+    const subscription1 = API.graphql(
+      graphqlOperation(subscriptions.onCreateContact)
+    ).subscribe({
+      next: (contactData) => <Body />
+    });
   
   export default function Body(props) {
+
+    // const subscription1 = API.graphql(
+    //   graphqlOperation(subscriptions.onCreateContact)
+    // ).subscribe({
+    //   next: (contactData) => initialState.contacts = contactData
+    // });
+    
+    // //Subscribe to a New Contact being added
+    // const subscription2 = API.graphql(
+    //   graphqlOperation(subscriptions.onUpdateContact)
+    // ).subscribe({
+    //   next: (contactData) => initialState.contacts = contactData
+    // });
+    
+    // //Subscribe to a New Contact being added
+    // const subscription3 = API.graphql(
+    //   graphqlOperation(subscriptions.onDeleteContact)
+    // ).subscribe({
+    //   next: (contactData) => initialState.contacts = contactData
+    // });
+    
+    
+
+    
     const classes = useStyles();
     const [state, dispatch] = useReducer(reducer, initialState)
     const { setContact } = props;
