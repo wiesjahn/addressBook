@@ -43,37 +43,10 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
-    const subscription1 = API.graphql(
-      graphqlOperation(subscriptions.onCreateContact)
-    ).subscribe({
-      next: (contactData) => <Body />
-    });
+
   
   export default function Body(props) {
-
-    // const subscription1 = API.graphql(
-    //   graphqlOperation(subscriptions.onCreateContact)
-    // ).subscribe({
-    //   next: (contactData) => initialState.contacts = contactData
-    // });
-    
-    // //Subscribe to a New Contact being added
-    // const subscription2 = API.graphql(
-    //   graphqlOperation(subscriptions.onUpdateContact)
-    // ).subscribe({
-    //   next: (contactData) => initialState.contacts = contactData
-    // });
-    
-    // //Subscribe to a New Contact being added
-    // const subscription3 = API.graphql(
-    //   graphqlOperation(subscriptions.onDeleteContact)
-    // ).subscribe({
-    //   next: (contactData) => initialState.contacts = contactData
-    // });
-    
-    
-
-    
+  
     const classes = useStyles();
     const [state, dispatch] = useReducer(reducer, initialState)
     const { setContact } = props;
@@ -84,6 +57,40 @@ const useStyles = makeStyles(theme => ({
       }
       getData();
     }, []);
+
+    const subscription1 = API.graphql(
+      graphqlOperation(subscriptions.onCreateContact)
+    ).subscribe({
+      next:
+ 
+          async function getData() {
+            const contactData = await API.graphql(graphqlOperation(listContacts));
+            dispatch({ type: QUERY, contacts: contactData.data.listContacts.items });
+          }
+    });
+
+    const subscription2 = API.graphql(
+      graphqlOperation(subscriptions.onUpdateContact)
+    ).subscribe({
+      next:
+ 
+          async function getData() {
+            const contactData = await API.graphql(graphqlOperation(listContacts));
+            dispatch({ type: QUERY, contacts: contactData.data.listContacts.items });
+          }
+    });
+
+    const subscription3 = API.graphql(
+      graphqlOperation(subscriptions.onDeleteContact)
+    ).subscribe({
+      next:
+ 
+          async function getData() {
+            const contactData = await API.graphql(graphqlOperation(listContacts));
+            dispatch({ type: QUERY, contacts: contactData.data.listContacts.items });
+          }
+    });
+
     return (      
         <Paper className={classes.paper} variant="outlined">
             <Grid container spacing={3} alignItems="center" justify="space-evenly" >
