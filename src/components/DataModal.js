@@ -37,51 +37,70 @@ function getModalStyle() {
   }));
 
 export default function DataModal(props) {
-    const { action } = props;
-    let contact = props.contact;   
-    //const [contact, setContact ] = React.useState(props.contact);
-    
-    const handleChange = (event) => {
-        const target = event.target;
-        const value = target.value;
-        const id = target.id;
-      };
+    const { action, handleClose } = props;
+    let contact = props.contact;
+    const [ firstName, setFirstName ] = React.useState(contact.firstName);
+    const [ lastName, setLastName ] = React.useState(contact.lastName);
+    const [ home, setHome ] = React.useState(contact.home);
+    const [ mobile, setMobile ] = React.useState(contact.mobile);
+    const [ work, setWork ] = React.useState(contact.work);
+    const [ type, setType ] = React.useState(contact.type);
+ 
+
+    //Would a Case Statement Make more sense?
+    //This seems way more convaluted than it should be.
+    const handleFirstNameChange = (event) => {
+        setFirstName( event.target.value); 
+        contact.firstName = event.target.value;
+    }
+
+    const handleLastNameChange = (event) => { 
+        setLastName( event.target.value);
+        contact.lastName = event.target.value;
+    }
+
+    const handleHomeChange = (event) => {
+        setHome( event.target.value); 
+        contact.home = event.target.value;
+    }
+
+    const handleMobileChange = (event) => { 
+        setMobile( event.target.value);
+        contact.mobile = event.target.value;
+    }
+
+    const handleWorkChange = (event) => {
+        setWork( event.target.value);
+        contact.work = event.target.value;
+    }
 
     const handleTypeChange = (event) => { 
         setType( event.target.value);
-        setContact({
-        id: contact.id,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        home: contact.home,
-        mobile:contact.mobile,
-        work: contact.work,
-        type: event.target.value
-        });
+        contact.type = event.target.value;
     }
 
-    function newContact() { 
-        console.log(type);
-        console.log(contact)
-        // const newContact = await API.graphql(graphqlOperation(createContact, { input: this.contact }));
+    async function newContact() { 
+        console.log(contact);
+        await API.graphql(graphqlOperation(createContact, { input: contact }));
+        handleClose();
     }
     
     async function editContact() { 
-        const editContact = await API.graphql(graphqlOperation(updateContact, { input: this.contact }));
+        await API.graphql(graphqlOperation(updateContact, { input: contact }));
+        handleClose();
     }
 
 
     const [modalStyle] = React.useState(getModalStyle)
     const classes = useStyles();
-    const [ type, setType ] = React.useState(contact.type);
     return (
         <div style={modalStyle} className={classes.paper}>
           <h2 id="simple-modal-title">Create a Contact</h2>
-          <TextField onChange={handleChange} value={contact.firstName} id="firstName" label="First Name" /> 
-          <TextField onChange={handleChange} value={contact.lastName} id="lastName" label="Last Name" /> 
-          <TextField onChange={handleChange} value={contact.home} id="home" label="Home Number" /> 
-          <TextField onChange={handleChange} value={contact.mobile} id="mobile" label="Mobile Number" /> 
-          <TextField onChange={handleChange} value={contact.work} id="work" label="Work Number" /> 
+          <TextField onChange={handleFirstNameChange} value={contact.firstName} id="firstName" label="First Name" /> 
+          <TextField onChange={handleLastNameChange} value={contact.lastName} id="lastName" label="Last Name" /> 
+          <TextField onChange={handleHomeChange} value={contact.home} id="home" label="Home Number" /> 
+          <TextField onChange={handleMobileChange} value={contact.mobile} id="mobile" label="Mobile Number" /> 
+          <TextField onChange={handleWorkChange} value={contact.work} id="work" label="Work Number" /> 
           <TextField
             id="contactType"
             name="type"

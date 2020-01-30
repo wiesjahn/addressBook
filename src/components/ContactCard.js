@@ -9,12 +9,9 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import EditIcon from '@material-ui/icons/Edit';
 import Modal from '@material-ui/core/Modal';
 import DataModal from './DataModal';
+import { deleteContact } from '../graphql/mutations';
+import API, { graphqlOperation } from '@aws-amplify/api';
 
-const state = {
-  contact: {
-    id: '',
-  }
-}
 
 const useStyles = makeStyles({
     card: {
@@ -46,14 +43,8 @@ const useStyles = makeStyles({
   
   export default function ContactCard(props) {
     const classes = useStyles();
-    const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(false);
     const { contact, setContact } = props;
-    const [ type, setType ] = React.useState(null);
-
-    const handleChange = event => {
-      setType(event.target.value);
-    };
   
     const handleOpen = () => {
       setOpen(true);
@@ -63,13 +54,14 @@ const useStyles = makeStyles({
       setOpen(false);
     };
 
-    const handleEdit = contact => {
-      setContact(contact);
+    async function handleDelete() {
+        await API.graphql(graphqlOperation(deleteContact, { input: {id: contact.id} }));
+        setOpen(false);
     }
 
     return (
     <div>
-      <Card className={classes.card} variant="outlined" key={contact.id}> 
+      <Card className={classes.card} variant="outlined" id={contact.id} key={contact.id}> 
         <CardContent>
           <Typography variant="h5" component="h2">
             {contact.firstName} {contact.lastName}
@@ -98,7 +90,7 @@ const useStyles = makeStyles({
           <IconButton className={classes.cardActions} aria-label="edit contact" onClick={ handleOpen }>
             <EditIcon />
           </IconButton>
-          <IconButton className={classes.cardActions} aria-label="remove contact">
+          <IconButton className={classes.cardActions} onClick={handleDelete} aria-label="remove contact">
             <HighlightOffIcon />
           </IconButton>
           </CardActions>
@@ -110,7 +102,7 @@ const useStyles = makeStyles({
         open={open}
         onClose={handleClose}
       >
-        <DataModal contact={contact} handleChange={handleChange} handleClose={handleClose} action="edit" />
+        <DataModal contact={contact} handleClose={handleClose} action="edit" />
       </Modal>
     </div>
     );

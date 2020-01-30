@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import awsconfig from '../aws-exports';
 import { makeStyles } from '@material-ui/core/styles';
 import ContactCard from './ContactCard';
 import Paper from '@material-ui/core/Paper';
@@ -6,25 +7,26 @@ import Grid from '@material-ui/core/Grid'
 import { listContacts } from './../graphql/queries'
 import API, { graphqlOperation } from '@aws-amplify/api';
 import Amplify from 'aws-amplify';
-// import * as subscriptions from '../graphql/subscritions';
+import * as subscriptions from '../graphql/subscriptions';
 
-
-// //Subscribe to a New Contact being added
-// const subscription = API.graphql(
-//   graphqlOperation(subscriptions.onCreateTodo)
-// ).subscribe({
-//   next: (todoData) => console.log(todoData)
-// });
-
-// //Stop subscription
-// subscription.unsubscribe();
-
-// Action Types
-const QUERY = 'QUERY';
+API.configure(awsconfig);
 
 const initialState = {
   contacts: [],
 };
+
+//Subscribe to a New Contact being added
+const subscription = API.graphql(
+  graphqlOperation(subscriptions.onCreateContact)
+).subscribe({
+  next: (contactData) => initialState.contacts = contactData
+});
+
+
+// Action Types
+const QUERY = 'QUERY';
+
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,10 +37,7 @@ const reducer = (state, action) => {
   }
 };
 
-// async function createContact() { 
-//   const contact = {}
-//   await API.graphql(graphqlOperation(createContact, { input: contact }));
-//}
+
 
 const useStyles = makeStyles(theme => ({
     paper: {
