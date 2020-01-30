@@ -1,0 +1,65 @@
+mutation CreateData{
+    contact1 : createContact(
+        input: {
+        	firstName: "Nick",
+        	lastName: "Wiesjahn",
+          mobile: "574-555-2308",
+          type: "Personal"
+        }){
+          id
+          firstName
+          lastName
+          mobile
+          home
+          work
+          type
+  },
+    contact2 : createContact(
+        input: {
+        	firstName: "Anne",
+        	lastName: "Wiesjahn",
+          mobile: "574-555-2802",
+          home: "575-555-2250",
+          type: "Personal"
+        }){
+          id
+          firstName
+          lastName
+          mobile
+          home
+          work
+          type
+  },
+    contact3 : createContact(
+        input: {
+        	firstName: "Jim",
+        	lastName: "Wiesjahn",
+          mobile: "574-555-8204",
+          home: "574-555-2250",
+          work: "574-555-6293"
+          type: "Personal"
+        }){
+          id
+          firstName
+          lastName
+          mobile
+          home
+          work
+          type
+  },
+    contact4 : createContact(
+        input: {
+        	firstName: "David",
+        	lastName: "Poindexter",
+          mobile: "574-555-2308",
+          type: "Professional"
+        }){
+          id
+          firstName
+          lastName
+          mobile
+          home
+          work
+          type
+  },
+}
